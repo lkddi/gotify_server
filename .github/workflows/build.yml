@@ -16,11 +16,24 @@ jobs:
       - run: yarn --version
       - run: (cd ui && yarn)
       - run: make build-js
-      - uses: golangci/golangci-lint-action@v9
-        with:
-          version: v2.4.0
-          args: --timeout=5m
-          skip-cache: true
+      - name: 安装 golangci-lint（优先 go install，失败则使用 Docker 镜像）
+        run: |
+          set -e
+          if ! command -v golangci-lint >/dev/null 2>&1; then
+            go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.60.3 || true
+          fi
+          if command -v golangci-lint >/dev/null 2>&1; then
+            golangci-lint version
+          else
+            echo "golangci-lint 不在本地，后续使用 Docker 镜像运行"
+          fi
+      - name: 运行 golangci-lint
+        run: |
+          if command -v golangci-lint >/dev/null 2>&1; then
+            golangci-lint run --timeout=5m
+          else
+            docker run --rm -v "$PWD:/work" -w /work golangci/golangci-lint:v1.60.3 golangci-lint run --timeout=5m
+          fi
       - run: go mod download
       - run: make download-tools
       - run: make test
