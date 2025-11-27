@@ -12,6 +12,8 @@ jobs:
         with:
           node-version: '24'
       - uses: actions/checkout@v6
+      - run: npm install -g yarn
+      - run: yarn --version
       - run: (cd ui && yarn)
       - run: make build-js
       - uses: golangci/golangci-lint-action@v9
