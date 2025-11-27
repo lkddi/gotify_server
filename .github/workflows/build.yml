@@ -35,7 +35,7 @@ jobs:
             docker run --rm \
               -e GOFLAGS=-mod=vendor \
               -v "$PWD:/work" -w /work \
-              golangci/golangci-lint:v1.60.3 golangci-lint run --timeout=5m
+              harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m
           fi
       - run: go mod download
       - name: 生成 vendor 依赖以避免容器内联网下载
