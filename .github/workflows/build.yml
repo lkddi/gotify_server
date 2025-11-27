@@ -18,6 +18,9 @@ jobs:
       - run: yarn --version
       - name: 设置 Go 代理
         run: go env -w GOPROXY=$GOPROXY
+      - name: 登录 Harbor 以拉取私有镜像
+        run: |
+          echo "${{ secrets.HARBOR_PASS }}" | docker login harbor.ay.lc -u "${{ secrets.HARBOR_USER }}" --password-stdin
       - run: (cd ui && yarn)
       - run: make build-js
       - run: go mod download
