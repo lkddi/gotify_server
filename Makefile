@@ -9,6 +9,10 @@ DOCKER_RUN=docker run --rm -e LD_FLAGS="$$LD_FLAGS" -v "$$PWD/.:${DOCKER_WORKDIR
 DOCKER_GO_BUILD=go build -mod=readonly -a -installsuffix cgo -ldflags "$$LD_FLAGS"
 DOCKER_TEST_LEVEL ?= 0 # Optionally run a test during docker build
 
+HARBOR_REGISTRY ?=
+HARBOR_PROJECT ?=
+HAR_PREFIX=$(HARBOR_REGISTRY)/$(HARBOR_PROJECT)
+
 test: test-coverage test-js
 check: check-go check-swagger check-js
 check-ci: check-swagger check-js
@@ -74,6 +78,10 @@ build-docker-multiarch: require-version
 		-t ghcr.io/gotify/server:${VERSION} \
 		-t ghcr.io/gotify/server:$(shell echo $(VERSION) | cut -d '.' -f -2) \
 		-t ghcr.io/gotify/server:$(shell echo $(VERSION) | cut -d '.' -f -1) \
+		$(if $(HARBOR_REGISTRY),-t $(HAR_PREFIX)/server:latest,) \
+		$(if $(HARBOR_REGISTRY),-t $(HAR_PREFIX)/server:${VERSION},) \
+		$(if $(HARBOR_REGISTRY),-t $(HAR_PREFIX)/server:$(shell echo $(VERSION) | cut -d '.' -f -2),) \
+		$(if $(HARBOR_REGISTRY),-t $(HAR_PREFIX)/server:$(shell echo $(VERSION) | cut -d '.' -f -1),) \
 		-t gotify/server-arm64:latest \
 		-t gotify/server-arm64:${VERSION} \
 		-t gotify/server-arm64:$(shell echo $(VERSION) | cut -d '.' -f -2) \
