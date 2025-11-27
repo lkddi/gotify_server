@@ -16,6 +16,9 @@ jobs:
       - run: yarn --version
       - run: (cd ui && yarn)
       - run: make build-js
+      - run: go mod download
+      - name: 生成 vendor 依赖以避免容器内联网下载
+        run: go mod vendor
       - name: 安装 golangci-lint（优先 go install，失败则使用 Docker 镜像）
         run: |
           set -e
@@ -37,9 +40,6 @@ jobs:
               -v "$PWD:/work" -w /work \
               harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m
           fi
-      - run: go mod download
-      - name: 生成 vendor 依赖以避免容器内联网下载
-        run: go mod vendor
       - run: make download-tools
       - run: make test
       - run: make check-ci
