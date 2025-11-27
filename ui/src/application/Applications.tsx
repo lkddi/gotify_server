@@ -24,6 +24,7 @@ import {useStores} from '../stores';
 import {observer} from 'mobx-react-lite';
 import {makeStyles} from 'tss-react/mui';
 import {ButtonBase, Tooltip} from '@mui/material';
+import {useI18n} from '../i18n/I18nContext';
 
 const useStyles = makeStyles()((theme) => ({
     imageContainer: {
@@ -48,6 +49,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const Applications = observer(() => {
     const {appStore} = useStores();
+    const {t} = useI18n();
     const apps = appStore.getItems();
     const [toDeleteApp, setToDeleteApp] = useState<IApplication>();
     const [toDeleteImage, setToDeleteImage] = useState<IApplication>();
@@ -78,14 +80,14 @@ const Applications = observer(() => {
 
     return (
         <DefaultPage
-            title="Applications"
+            title={t('apps.title')}
             rightControl={
                 <Button
                     id="create-app"
                     variant="contained"
                     color="primary"
                     onClick={() => setCreateDialog(true)}>
-                    Create Application
+                    {t('apps.create')}
                 </Button>
             }
             maxWidth={1000}>
@@ -95,11 +97,11 @@ const Applications = observer(() => {
                         <TableHead>
                             <TableRow>
                                 <TableCell padding="checkbox" style={{width: 80}} />
-                                <TableCell>Name</TableCell>
-                                <TableCell>Token</TableCell>
-                                <TableCell>Description</TableCell>
-                                <TableCell>Priority</TableCell>
-                                <TableCell>Last Used</TableCell>
+                                <TableCell>{t('apps.col.name')}</TableCell>
+                                <TableCell>{t('apps.col.token')}</TableCell>
+                                <TableCell>{t('apps.col.description')}</TableCell>
+                                <TableCell>{t('apps.col.priority')}</TableCell>
+                                <TableCell>{t('apps.col.lastUsed')}</TableCell>
                                 <TableCell />
                                 <TableCell />
                             </TableRow>
@@ -151,16 +153,16 @@ const Applications = observer(() => {
             )}
             {toDeleteApp != null && (
                 <ConfirmDialog
-                    title="Confirm Delete"
-                    text={'Delete ' + toDeleteApp.name + '?'}
+                    title={t('apps.confirm.deleteTitle')}
+                    text={t('apps.confirm.deleteText').replace('{name}', toDeleteApp.name)}
                     fClose={() => setToDeleteApp(undefined)}
                     fOnSubmit={() => appStore.remove(toDeleteApp.id)}
                 />
             )}
             {toDeleteImage != null && (
                 <ConfirmDialog
-                    title="Confirm Delete Image"
-                    text={'Delete image for ' + toDeleteImage.name + '?'}
+                    title={t('apps.confirm.deleteImageTitle')}
+                    text={t('apps.confirm.deleteImageText').replace('{name}', toDeleteImage.name)}
                     fClose={() => setToDeleteImage(undefined)}
                     fOnSubmit={() => appStore.deleteImage(toDeleteImage.id)}
                 />
@@ -198,18 +200,19 @@ const Row = ({
 }: IRowProps) => {
     const {classes} = useStyles();
     const isDefaultImage = image === 'static/defaultapp.png';
+    const {t} = useI18n();
     return (
         <TableRow>
             <TableCell padding="normal">
                 <div style={{display: 'flex'}}>
-                    <Tooltip title="Delete image" placement="top" arrow>
+                    <Tooltip title={t('apps.tooltip.deleteImage')} placement="top" arrow>
                         <ButtonBase
                             className={classes.imageContainer}
                             onClick={fDeleteImage}
                             disabled={isDefaultImage}>
                             <img
                                 src={config.get('url') + image}
-                                alt="app logo"
+                                alt={t('apps.alt.logo')}
                                 width="40"
                                 height="40"
                             />

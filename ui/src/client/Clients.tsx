@@ -19,9 +19,11 @@ import CopyableSecret from '../common/CopyableSecret';
 import {LastUsedCell} from '../common/LastUsedCell';
 import {observer} from 'mobx-react-lite';
 import {useStores} from '../stores';
+import {useI18n} from '../i18n/I18nContext';
 
 const Clients = observer(() => {
     const {clientStore} = useStores();
+    const {t} = useI18n();
     const [toDeleteClient, setToDeleteClient] = useState<IClient>();
     const [toUpdateClient, setToUpdateClient] = useState<IClient>();
     const [createDialog, setCreateDialog] = useState<boolean>(false);
@@ -31,14 +33,14 @@ const Clients = observer(() => {
 
     return (
         <DefaultPage
-            title="Clients"
+            title={t('clients.title')}
             rightControl={
                 <Button
                     id="create-client"
                     variant="contained"
                     color="primary"
                     onClick={() => setCreateDialog(true)}>
-                    Create Client
+                    {t('clients.create')}
                 </Button>
             }>
             <Grid size={12}>
@@ -46,9 +48,9 @@ const Clients = observer(() => {
                     <Table id="client-table">
                         <TableHead>
                             <TableRow style={{textAlign: 'center'}}>
-                                <TableCell>Name</TableCell>
-                                <TableCell style={{width: 200}}>Token</TableCell>
-                                <TableCell>Last Used</TableCell>
+                                <TableCell>{t('clients.col.name')}</TableCell>
+                                <TableCell style={{width: 200}}>{t('clients.col.token')}</TableCell>
+                                <TableCell>{t('clients.col.lastUsed')}</TableCell>
                                 <TableCell />
                                 <TableCell />
                             </TableRow>
@@ -83,8 +85,8 @@ const Clients = observer(() => {
             )}
             {toDeleteClient != null && (
                 <ConfirmDialog
-                    title="Confirm Delete"
-                    text={'Delete ' + toDeleteClient.name + '?'}
+                    title={t('common.confirm.deleteTitle')}
+                    text={t('apps.confirm.deleteText').replace('{name}', toDeleteClient.name)}
                     fClose={() => setToDeleteClient(undefined)}
                     fOnSubmit={() => clientStore.remove(toDeleteClient.id)}
                 />

@@ -18,6 +18,7 @@ import {DrawerProps} from '@mui/material/Drawer/Drawer';
 import CloseIcon from '@mui/icons-material/Close';
 import {makeStyles} from 'tss-react/mui';
 import {useStores} from '../stores';
+import {useI18n} from '../i18n/I18nContext';
 
 const useStyles = makeStyles()((theme: Theme) => ({
     root: {
@@ -48,6 +49,7 @@ const Navigation = observer(({loggedIn, navOpen, setNavOpen}: IProps) => {
         React.useState(mayAllowPermission);
     const {classes} = useStyles();
     const {appStore} = useStores();
+    const {t} = useI18n();
     const apps = appStore.getItems();
 
     const userApps =
@@ -74,10 +76,10 @@ const Navigation = observer(({loggedIn, navOpen, setNavOpen}: IProps) => {
 
     const placeholderItems = [
         <ListItemButton disabled key={-1}>
-            <ListItemText primary="Some Server" />
+            <ListItemText primary={t('nav.placeholderServer1')} />
         </ListItemButton>,
         <ListItemButton disabled key={-2}>
-            <ListItemText primary="A Raspberry PI" />
+            <ListItemText primary={t('nav.placeholderServer2')} />
         </ListItemButton>,
     ];
 
@@ -90,7 +92,7 @@ const Navigation = observer(({loggedIn, navOpen, setNavOpen}: IProps) => {
             <div className={classes.toolbar} />
             <Link className={classes.link} to="/" onClick={() => setNavOpen(false)}>
                 <ListItemButton disabled={!loggedIn} className="all">
-                    <ListItemText primary="All Messages" />
+                    <ListItemText primary={t('nav.allMessages')} />
                 </ListItemButton>
             </Link>
             <Divider />
@@ -103,7 +105,7 @@ const Navigation = observer(({loggedIn, navOpen, setNavOpen}: IProps) => {
                             requestPermission();
                             setShowRequestNotification(false);
                         }}>
-                        Enable Notifications
+                        {t('nav.enableNotifications')}
                     </Button>
                 ) : null}
             </Typography>

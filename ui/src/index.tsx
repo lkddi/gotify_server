@@ -4,6 +4,7 @@ import 'typeface-roboto';
 import {initAxios} from './apiAuth';
 import * as config from './config';
 import Layout from './layout/Layout';
+import {I18nProvider} from './i18n/I18nContext';
 import {unregister} from './registerServiceWorker';
 import {CurrentUser} from './CurrentUser';
 import {AppStore} from './application/AppStore';
@@ -62,7 +63,9 @@ const initStores = (): StoreMapping => {
 
     createRoot(document.getElementById('root')!).render(
         <StoreContext.Provider value={stores}>
-            <Layout />
+            <I18nProvider>
+                <Layout />
+            </I18nProvider>
         </StoreContext.Provider>
     );
     unregister();

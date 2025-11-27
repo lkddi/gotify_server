@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
+import {useI18n} from '../i18n/I18nContext';
 
 interface IProps {
     fClose: VoidFunction;
@@ -14,6 +15,7 @@ interface IProps {
 
 const AddClientDialog = ({fClose, fOnSubmit}: IProps) => {
     const [name, setName] = useState('');
+    const {t} = useI18n();
 
     const submitEnabled = name.length !== 0;
     const submitAndClose = async () => {
@@ -23,13 +25,13 @@ const AddClientDialog = ({fClose, fOnSubmit}: IProps) => {
 
     return (
         <Dialog open={true} onClose={fClose} aria-labelledby="form-dialog-title" id="client-dialog">
-            <DialogTitle id="form-dialog-title">Create a client</DialogTitle>
+            <DialogTitle id="form-dialog-title">{t('clients.dialog.createTitle')}</DialogTitle>
             <DialogContent>
                 <TextField
                     autoFocus
                     margin="dense"
                     className="name"
-                    label="Name *"
+                    label={t('apps.dialog.name')}
                     type="email"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -37,8 +39,8 @@ const AddClientDialog = ({fClose, fOnSubmit}: IProps) => {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={fClose}>Cancel</Button>
-                <Tooltip placement={'bottom-start'} title={submitEnabled ? '' : 'name is required'}>
+                <Button onClick={fClose}>{t('common.cancel')}</Button>
+                <Tooltip placement={'bottom-start'} title={submitEnabled ? '' : t('common.required.name')}>
                     <div>
                         <Button
                             className="create"
@@ -46,7 +48,7 @@ const AddClientDialog = ({fClose, fOnSubmit}: IProps) => {
                             onClick={submitAndClose}
                             color="primary"
                             variant="contained">
-                            Create
+                            {t('common.create')}
                         </Button>
                     </div>
                 </Tooltip>

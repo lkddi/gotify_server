@@ -26,8 +26,8 @@ type ApplicationDatabase interface {
 
 // The ApplicationAPI provides handlers for managing applications.
 type ApplicationAPI struct {
-	DB       ApplicationDatabase
-	ImageDir string
+    DB       ApplicationDatabase
+    ImageDir string
 }
 
 // Application Params Model
@@ -101,6 +101,70 @@ func (a *ApplicationAPI) CreateApplication(ctx *gin.Context) {
 		}
 		ctx.JSON(200, withResolvedImage(&app))
 	}
+}
+
+// CreateApplicationForUser creates an application for a specific user id (admin only).
+// swagger:operation POST /user/{id}/application application createAppForUser
+//
+// Admin: create an application for a specific user id.
+//
+// ---
+// consumes: [application/json]
+// produces: [application/json]
+// security: [clientTokenAuthorizationHeader: [], clientTokenHeader: [], clientTokenQuery: [], basicAuth: []]
+// parameters:
+// - name: id
+//   in: path
+//   description: the user id
+//   required: true
+//   type: integer
+//   format: int64
+// - name: body
+//   in: body
+//   description: the application to add
+//   required: true
+//   schema:
+//     $ref: "#/definitions/ApplicationParams"
+// responses:
+//   200:
+//     description: Ok
+//     schema:
+//         $ref: "#/definitions/Application"
+//   400:
+//     description: Bad Request
+//     schema:
+//         $ref: "#/definitions/Error"
+//   401:
+//     description: Unauthorized
+//     schema:
+//         $ref: "#/definitions/Error"
+//   403:
+//     description: Forbidden
+//     schema:
+//         $ref: "#/definitions/Error"
+//   404:
+//     description: Not Found
+//     schema:
+//         $ref: "#/definitions/Error"
+func (a *ApplicationAPI) CreateApplicationForUser(ctx *gin.Context) {
+    withID(ctx, "id", func(uid uint) {
+        applicationParams := ApplicationParams{}
+        if err := ctx.Bind(&applicationParams); err == nil {
+            app := model.Application{
+                Name:            applicationParams.Name,
+                Description:     applicationParams.Description,
+                DefaultPriority: applicationParams.DefaultPriority,
+                Token:           auth.GenerateNotExistingToken(generateApplicationToken, a.applicationExists),
+                UserID:          uid,
+                Internal:        false,
+            }
+
+            if success := successOrAbort(ctx, 500, a.DB.CreateApplication(&app)); !success {
+                return
+            }
+            ctx.JSON(200, withResolvedImage(&app))
+        }
+    })
 }
 
 // GetApplications returns all applications a user has.

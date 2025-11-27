@@ -14,23 +14,25 @@ import CopyableSecret from '../common/CopyableSecret';
 import {observer} from 'mobx-react-lite';
 import {IPlugin} from '../types';
 import {useStores} from '../stores';
+import {useI18n} from '../i18n/I18nContext';
 
 const Plugins = observer(() => {
     const {pluginStore} = useStores();
+    const {t} = useI18n();
     React.useEffect(() => void pluginStore.refresh(), []);
     const plugins = pluginStore.getItems();
     return (
-        <DefaultPage title="Plugins" maxWidth={1000}>
+        <DefaultPage title={t('plugins.title')} maxWidth={1000}>
             <Grid size={{xs: 12}}>
                 <Paper elevation={6} style={{overflowX: 'auto'}}>
                     <Table id="plugin-table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Enabled</TableCell>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Token</TableCell>
-                                <TableCell>Details</TableCell>
+                                <TableCell>{t('plugins.col.id')}</TableCell>
+                                <TableCell>{t('plugins.col.enabled')}</TableCell>
+                                <TableCell>{t('plugins.col.name')}</TableCell>
+                                <TableCell>{t('plugins.col.token')}</TableCell>
+                                <TableCell>{t('plugins.col.details')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

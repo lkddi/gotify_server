@@ -17,6 +17,7 @@ import SupervisorAccount from '@mui/icons-material/SupervisorAccount';
 import React, {CSSProperties} from 'react';
 import {Link} from 'react-router-dom';
 import {useMediaQuery} from '@mui/material';
+import {useI18n} from '../i18n/I18nContext';
 
 const useStyles = makeStyles()((theme: Theme) => ({
     appBar: {
@@ -86,6 +87,7 @@ const Header = ({
     showSettings,
 }: IProps) => {
     const {classes} = useStyles();
+    const {t, locale, setLocale} = useI18n();
 
     return (
         <AppBar
@@ -120,6 +122,9 @@ const Header = ({
                     <IconButton onClick={toggleTheme} color="inherit" size="large">
                         <Highlight />
                     </IconButton>
+                    <Button color="inherit" onClick={() => setLocale(locale === 'zh' ? 'en' : 'zh')}>
+                        {locale === 'zh' ? t('lang.zh') : t('lang.en')}
+                    </Button>
 
                     <a
                         href="https://github.com/gotify/server"
@@ -150,6 +155,7 @@ const Buttons = ({
     showSettings: VoidFunction;
 }) => {
     const {classes} = useStyles();
+    const {t} = useI18n();
 
     return (
         <div className={classes.menuButtons}>
@@ -157,22 +163,22 @@ const Buttons = ({
                 sx={{display: {sm: 'none', xs: 'block'}}}
                 icon={<MenuIcon />}
                 onClick={() => setNavOpen(true)}
-                label="menu"
+                label={t('header.menu')}
                 color="inherit"
             />
             {admin && (
                 <Link className={classes.link} to="/users" id="navigate-users">
-                    <ResponsiveButton icon={<SupervisorAccount />} label="users" color="inherit" />
+                    <ResponsiveButton icon={<SupervisorAccount />} label={t('header.users')} color="inherit" />
                 </Link>
             )}
             <Link className={classes.link} to="/applications" id="navigate-apps">
-                <ResponsiveButton icon={<Chat />} label="apps" color="inherit" />
+                <ResponsiveButton icon={<Chat />} label={t('header.apps')} color="inherit" />
             </Link>
             <Link className={classes.link} to="/clients" id="navigate-clients">
-                <ResponsiveButton icon={<DevicesOther />} label="clients" color="inherit" />
+                <ResponsiveButton icon={<DevicesOther />} label={t('header.clients')} color="inherit" />
             </Link>
             <Link className={classes.link} to="/plugins" id="navigate-plugins">
-                <ResponsiveButton icon={<Apps />} label="plugins" color="inherit" />
+                <ResponsiveButton icon={<Apps />} label={t('header.plugins')} color="inherit" />
             </Link>
             <ResponsiveButton
                 icon={<AccountCircle />}
@@ -183,7 +189,7 @@ const Buttons = ({
             />
             <ResponsiveButton
                 icon={<ExitToApp />}
-                label="Logout"
+                label={t('header.logout')}
                 onClick={logout}
                 id="logout"
                 color="inherit"

@@ -1,19 +1,18 @@
-// Package docs Gotify REST-API.
+// Package docs Gotify 接口文档。
 //
-// This is the documentation of the Gotify REST-API.
+// 这是 Gotify 的 REST 接口文档。
 //
-//	# Authentication
-//	In Gotify there are two token types:
-//	__clientToken__: a client is something that receives message and manages stuff like creating new tokens or delete messages. (f.ex this token should be used for an android app)
-//	__appToken__: an application is something that sends messages (f.ex. this token should be used for a shell script)
+//	# 认证说明
+//	Gotify 中有两种令牌类型：
+//	__clientToken__：客户端令牌用于接收消息并管理资源，例如创建新令牌、删除消息（如 Android 应用应使用此令牌）。
+//	__appToken__：应用令牌用于发送消息（如 Shell 脚本应使用此令牌）。
 //
-//	The token can be transmitted in a header named `X-Gotify-Key`, in a query parameter named `token` or
-//	through a header named `Authorization` with the value prefixed with `Bearer` (Ex. `Bearer randomtoken`).
-//	There is also the possibility to authenticate through basic auth, this should only be used for creating a clientToken.
+//	令牌可通过以下方式传递：请求头 `X-Gotify-Key`，或查询参数 `token`；也可通过请求头 `Authorization` 携带 `Bearer <token>`。
+//	此外也支持 Basic 认证，但仅建议用于创建客户端令牌。
 //
 //	\---
 //
-//	Found a bug or have some questions? [Create an issue on GitHub](https://github.com/gotify/server/issues)
+//	发现问题或有疑问？请在 GitHub 提交 Issue：[在 GitHub 创建 Issue](https://github.com/gotify/server/issues)
 //
 //	    Schemes: http, https
 //	    Host: localhost

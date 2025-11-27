@@ -11,6 +11,7 @@ import ConfirmDialog from '../common/ConfirmDialog';
 import LoadingSpinner from '../common/LoadingSpinner';
 import {useStores} from '../stores';
 import {Virtuoso} from 'react-virtuoso';
+import {useI18n} from '../i18n/I18nContext';
 
 const Messages = observer(() => {
     const {id} = useParams<{id: string}>();
@@ -19,6 +20,7 @@ const Messages = observer(() => {
     const [deleteAll, setDeleteAll] = React.useState(false);
     const [isLoadingMore, setLoadingMore] = React.useState(false);
     const {messagesStore, appStore} = useStores();
+    const {t} = useI18n();
     const messages = messagesStore.get(appId);
     const hasMore = messagesStore.canLoadMore(appId);
     const name = appStore.getName(appId);
@@ -61,7 +63,7 @@ const Messages = observer(() => {
             return <LoadingSpinner />;
         }
         if (hasMessages) {
-            return label("You've reached the end");
+            return label(t('messages.reachedEnd'));
         }
         return null;
     };
@@ -77,7 +79,7 @@ const Messages = observer(() => {
             itemContent={renderMessage}
             components={{
                 Footer: messageFooter,
-                EmptyPlaceholder: () => label('No messages'),
+                EmptyPlaceholder: () => label(t('messages.empty')),
             }}
         />
     );
@@ -99,7 +101,7 @@ const Messages = observer(() => {
                         color="primary"
                         onClick={() => messagesStore.refreshByApp(appId)}
                         style={{marginRight: 5}}>
-                        Refresh
+                        {t('messages.refresh')}
                     </Button>
                     <Button
                         id="delete-all"
@@ -109,7 +111,7 @@ const Messages = observer(() => {
                         onClick={() => {
                             setDeleteAll(true);
                         }}>
-                        Delete All
+                        {t('messages.deleteAll')}
                     </Button>
                 </div>
             }>
@@ -117,8 +119,8 @@ const Messages = observer(() => {
 
             {deleteAll && (
                 <ConfirmDialog
-                    title="Confirm Delete"
-                    text={'Delete all messages?'}
+                    title={t('common.confirm.deleteTitle')}
+                    text={t('messages.confirm.deleteAll')}
                     fClose={() => setDeleteAll(false)}
                     fOnSubmit={() => messagesStore.removeByApp(appId)}
                 />

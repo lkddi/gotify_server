@@ -4,7 +4,7 @@
     </a>
 </p>
 
-<h1 align="center">gotify/server</h1>
+<h1 align="center">gotify/server（服务端）</h1>
 
 <p align="center">
     <a href="https://github.com/gotify/server/actions/workflows/build.yml">
@@ -27,20 +27,20 @@
     </a>
 </p>
 
-## Intro
-We wanted a simple server for sending and receiving messages (in real time per WebSocket). For this, not many open source projects existed and most of the existing ones were abandoned. Also, a requirement was that it can be self-hosted. We know there are many free and commercial push services out there.
+## 简介
+我们希望拥有一个简单的消息推送服务端：通过 REST 发送消息、通过 WebSocket 实时接收消息；能够自托管；并且有活跃维护的开源实现。基于这些目标，我们构建了 Gotify Server。
 
-## Features
+## 功能特性
 
 <img alt="Gotify UI screenshot" src="ui.png" align="right" width="500px"/>
 
-* send messages via REST-API
-* receive messages via WebSocket
-* manage users, clients and applications
-* [Plugins](https://gotify.net/docs/plugin)
-* Web-UI -> [./ui](ui)
-* CLI for sending messages -> [gotify/cli](https://github.com/gotify/cli)
-* Android-App -> [gotify/android](https://github.com/gotify/android)
+* 通过 REST API 发送消息
+* 通过 WebSocket 实时接收消息
+* 管理用户、客户端与应用
+* [插件机制](https://gotify.net/docs/plugin)
+* Web 管理界面 -> [./ui](ui)
+* 命令行发送工具 -> [gotify/cli](https://github.com/gotify/cli)
+* Android 客户端 -> [gotify/android](https://github.com/gotify/android)
 
 [<img src="https://play.google.com/intl/en_gb/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" width="150" />][playstore]
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" width="150"/>][fdroid]
@@ -49,23 +49,23 @@ We wanted a simple server for sending and receiving messages (in real time per W
 
 ---
 
-**[Documentation](https://gotify.net/docs)**
+**[文档](https://gotify.net/docs)**
 
-[Install](https://gotify.net/docs/install) ᛫
-[Configuration](https://gotify.net/docs/config) ᛫
-[REST-API](https://gotify.net/api-docs) ᛫
-[Setup Dev Environment](https://gotify.net/docs/dev-setup)
+[安装](https://gotify.net/docs/install) ᛫
+[配置](https://gotify.net/docs/config) ᛫
+[REST API](https://gotify.net/api-docs) ᛫
+[开发环境搭建](https://gotify.net/docs/dev-setup)
 
-## Contributing
+## 参与贡献
 
-We welcome all kinds of contribution, including bug reports, feature requests, documentation improvements, UI refinements, etc. Check out [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+欢迎各种形式的贡献，包括但不限于：问题反馈、功能建议、文档改进、界面优化等。请参阅 [CONTRIBUTING.md](CONTRIBUTING.md) 获取贡献指南。
 
-## Versioning
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the
-[tags on this repository](https://github.com/gotify/server/tags).
+## 版本管理
+本项目遵循 [SemVer](http://semver.org/) 语义化版本。所有版本请查看
+[仓库标签](https://github.com/gotify/server/tags)。
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+## 许可证
+本项目基于 MIT 许可证发布，详情见 [LICENSE](LICENSE)。
 
  [playstore]: https://play.google.com/store/apps/details?id=com.github.gotify
  [fdroid]: https://f-droid.org/de/packages/com.github.gotify/

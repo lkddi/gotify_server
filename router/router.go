@@ -215,6 +215,9 @@ func Create(db *database.GormDatabase, vInfo *model.VersionInfo, conf *config.Co
 		authAdmin.GET("/:id", userHandler.GetUserByID)
 
 		authAdmin.POST("/:id", userHandler.UpdateUserByID)
+
+		// Admin creates application for a specific user
+		authAdmin.POST("/:id/application", applicationHandler.CreateApplicationForUser)
 	}
 	return g, streamHandler.Close
 }

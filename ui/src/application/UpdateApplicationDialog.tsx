@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import {NumberField} from '../common/NumberField';
 import React, {useState} from 'react';
+import {useI18n} from '../i18n/I18nContext';
 
 interface IProps {
     fClose: VoidFunction;
@@ -27,6 +28,7 @@ export const UpdateApplicationDialog = ({
     const [name, setName] = useState(initialName);
     const [description, setDescription] = useState(initialDescription);
     const [defaultPriority, setDefaultPriority] = useState(initialDefaultPriority);
+    const {t} = useI18n();
 
     const submitEnabled = name.length !== 0;
     const submitAndClose = async () => {
@@ -36,14 +38,14 @@ export const UpdateApplicationDialog = ({
 
     return (
         <Dialog open={true} onClose={fClose} aria-labelledby="form-dialog-title" id="app-dialog">
-            <DialogTitle id="form-dialog-title">Update an application</DialogTitle>
+            <DialogTitle id="form-dialog-title">{t('apps.dialog.updateTitle')}</DialogTitle>
             <DialogContent>
-                <DialogContentText>An application is allowed to send messages.</DialogContentText>
+                <DialogContentText>{t('apps.dialog.help')}</DialogContentText>
                 <TextField
                     autoFocus
                     margin="dense"
                     className="name"
-                    label="Name *"
+                    label={t('apps.dialog.name')}
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -52,7 +54,7 @@ export const UpdateApplicationDialog = ({
                 <TextField
                     margin="dense"
                     className="description"
-                    label="Short Description"
+                    label={t('apps.dialog.shortDesc')}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     fullWidth
@@ -61,15 +63,15 @@ export const UpdateApplicationDialog = ({
                 <NumberField
                     margin="dense"
                     className="priority"
-                    label="Default Priority"
+                    label={t('apps.dialog.defaultPriority')}
                     value={defaultPriority}
                     onChange={(e) => setDefaultPriority(e)}
                     fullWidth
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={fClose}>Cancel</Button>
-                <Tooltip title={submitEnabled ? '' : 'name is required'}>
+                <Button onClick={fClose}>{t('common.cancel')}</Button>
+                <Tooltip title={submitEnabled ? '' : t('common.required.name')}>
                     <div>
                         <Button
                             className="update"
@@ -77,7 +79,7 @@ export const UpdateApplicationDialog = ({
                             onClick={submitAndClose}
                             color="primary"
                             variant="contained">
-                            Update
+                            {t('common.update')}
                         </Button>
                     </div>
                 </Tooltip>

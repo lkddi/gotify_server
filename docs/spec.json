@@ -11,8 +11,8 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the documentation of the Gotify REST-API.\n\n# Authentication\nIn Gotify there are two token types:\n__clientToken__: a client is something that receives message and manages stuff like creating new tokens or delete messages. (f.ex this token should be used for an android app)\n__appToken__: an application is something that sends messages (f.ex. this token should be used for a shell script)\n\nThe token can be transmitted in a header named `X-Gotify-Key`, in a query parameter named `token` or\nthrough a header named `Authorization` with the value prefixed with `Bearer` (Ex. `Bearer randomtoken`).\nThere is also the possibility to authenticate through basic auth, this should only be used for creating a clientToken.\n\n\\---\n\nFound a bug or have some questions? [Create an issue on GitHub](https://github.com/gotify/server/issues)",
-    "title": "Gotify REST-API.",
+    "description": "这是 Gotify 的 REST 接口文档。\n\n# 认证说明\nGotify 中有两种令牌类型：\n__clientToken__：客户端令牌用于接收消息并管理资源，例如创建新令牌、删除消息（如 Android 应用应使用此令牌）。\n__appToken__：应用令牌用于发送消息（如 Shell 脚本应使用此令牌）。\n\n令牌可通过以下方式传递：请求头 `X-Gotify-Key`，或查询参数 `token`；也可通过请求头 `Authorization` 携带 `Bearer \u003ctoken\u003e`。\n此外也支持 Basic 认证，但仅建议用于创建客户端令牌。\n\n\\---\n\n发现问题或有疑问？请在 GitHub 提交 Issue：[在 GitHub 创建 Issue](https://github.com/gotify/server/issues)",
+    "title": "Gotify 接口文档。",
     "license": {
       "name": "MIT",
       "url": "https://github.com/gotify/server/blob/master/LICENSE"
@@ -2000,6 +2000,86 @@
         "responses": {
           "200": {
             "description": "Ok"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/application": {
+      "post": {
+        "security": [
+          {
+            "clientTokenAuthorizationHeader": []
+          },
+          {
+            "clientTokenHeader": []
+          },
+          {
+            "clientTokenQuery": []
+          },
+          {
+            "basicAuth": []
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "application"
+        ],
+        "summary": "Admin: create an application for a specific user id.",
+        "operationId": "createAppForUser",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "the user id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "the application to add",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApplicationParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            }
           },
           "400": {
             "description": "Bad Request",

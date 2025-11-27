@@ -35,7 +35,13 @@
     Gotify requires JavaScript.
 </noscript>
 <div id="root"></div>
-<script>window.config = %CONFIG%;</script>
+<script>
+  try {
+    window.config = JSON.parse('%CONFIG%');
+  } catch (e) {
+    window.config = window.config || {};
+  }
+</script>
 <script type="module" src="/src/index.tsx"></script>
 </body>
 </html>
