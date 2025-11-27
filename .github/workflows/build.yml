@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   gotify:
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v6
         with:
