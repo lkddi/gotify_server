@@ -42,8 +42,9 @@ jobs:
           else
             docker run --rm \
               -e GOPROXY=$GOPROXY \
+              -e GO111MODULE=on \
               -v "$PWD:/work" -w /work \
-              harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m
+              harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m ./...
           fi
       - run: make download-tools
       - run: make test
