@@ -1,3 +1,4 @@
+# 构建 Gotify 服务器 仓库为自建 Gitea 
 name: build
 on: [push, pull_request]
 
@@ -37,10 +38,9 @@ jobs:
       - name: 运行 golangci-lint
         run: |
           if command -v golangci-lint >/dev/null 2>&1; then
-            GOFLAGS=-mod=vendor golangci-lint run --timeout=5m
+            golangci-lint run --timeout=5m
           else
             docker run --rm \
-              -e GOFLAGS=-mod=vendor \
               -e GOPROXY=$GOPROXY \
               -v "$PWD:/work" -w /work \
               harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m
