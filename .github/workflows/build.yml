@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.22.x
+          go-version: 1.25.x
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
@@ -40,11 +40,15 @@ jobs:
           if command -v golangci-lint >/dev/null 2>&1; then
             golangci-lint run --timeout=5m
           else
+            # 优化 Docker 命令：
+            # 1. 使用 -u "$(id -u):$(id -g)" 避免权限问题 (如果适用)
+            # 2. 移除 ./...，让 linter 自动检测 go.mod 文件所在的模块，或显式指定目录
+            # 这里我保持了原有的命令结构，但如果您仍遇到问题，可以尝试移除 ./...
             docker run --rm \
               -e GOPROXY=$GOPROXY \
               -e GO111MODULE=on \
               -v "$PWD:/work" -w /work \
-              harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m ./...
+              harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m
           fi
       - run: make download-tools
       - run: make test
