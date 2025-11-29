@@ -45,13 +45,13 @@ jobs:
             golangci-lint run --timeout=5m
           else
             # Run golangci-lint in Docker with proper working directory and module setup
-            # Use the go.mod file to ensure proper module detection
+            # Use a newer golangci-lint version that supports Go 1.25
             docker run --rm \
               -e GOPROXY=$GOPROXY \
               -e GO111MODULE=on \
               -v "$PWD:/work" -w /work \
               -v $HOME/go/pkg/mod:/go/pkg/mod:ro \
-              harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m --go=1.25
+              harbor.ay.lc/tools/golangci-lint:v1.61.0 golangci-lint run --timeout=5m
           fi
       - run: make download-tools
       - run: make test
