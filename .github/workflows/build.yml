@@ -15,11 +15,15 @@ jobs:
         with:
           node-version: '24'
       - uses: actions/checkout@v6
+      - name: 设置 npm 镜像源
+        run: |
+          npm config set registry https://registry.npmmirror.com/
+          yarn config set registry https://registry.npmmirror.com/
       - run: npm install -g yarn
       - run: yarn --version
       - name: 设置 Go 代理
         run: go env -w GOPROXY=$GOPROXY
-      - run: (cd ui && yarn)
+      - run: (cd ui && yarn config set registry https://registry.npmmirror.com/ && yarn)
       - run: make build-js
       - run: go mod download
       - name: 生成 vendor 依赖以避免容器内联网下载
@@ -51,7 +55,12 @@ jobs:
           fi
       - run: make download-tools
       - run: make test
-      - run: make check-ci
+      - name: 设置前端依赖镜像源并检查
+        run: |
+          cd ui
+          yarn config set registry https://registry.npmmirror.com/
+          cd ..
+          make check-ci
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -62,6 +71,8 @@ jobs:
           export LD_FLAGS="-w -s -X main.Version=$VERSION -X main.BuildDate=$(date "+%F-%T") -X main.Commit=$(git rev-parse --verify HEAD) -X main.Mode=prod"
           echo "LD_FLAGS=$LD_FLAGS" >> $GITHUB_ENV
 
+          # 确保 UI 构建使用国内源
+          cd ui && yarn config set registry https://registry.npmmirror.com/ && cd ..
           make build
           sudo chown -R $UID build
           make package-zip
@@ -91,6 +102,8 @@ jobs:
           password: ${{ secrets.HARBOR_PASS }}
       - if: startsWith(github.ref, 'refs/tags/v')
         run: |
+          # 设置 Yarn registry 为国内源
+          cd ui && yarn config set registry https://registry.npmmirror.com/ && cd ..
           make DOCKER_BUILD_PUSH=true HARBOR_REGISTRY=harbor.ay.lc HARBOR_PROJECT=gotify build-docker
       - if: startsWith(github.ref, 'refs/tags/v')
         uses: svenstaro/upload-release-action@v2
