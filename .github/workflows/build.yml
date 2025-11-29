@@ -44,15 +44,12 @@ jobs:
           if command -v golangci-lint >/dev/null 2>&1; then
             golangci-lint run --timeout=5m
           else
-            # Run golangci-lint in Docker with proper working directory and module setup
-            # Use official golangci/golangci-lint image which supports newer Go versions
-            # Run from the module root directory with correct module detection
+            # Run golangci-lint in Docker, explicitly using the vendored dependencies
             docker run --rm \
               -e GOPROXY=$GOPROXY \
               -e GO111MODULE=on \
-              -v "$PWD:/work" -w /work \
-              -v $HOME/go/pkg/mod:/go/pkg/mod:ro \
-              golangci/golangci-lint:v1.61.0 golangci-lint run --timeout=5m
+              -v "$PWD:/app" -w /app \
+              golangci/golangci-lint:v1.61.0 golangci-lint run --timeout=5m --vendor
           fi
       - run: make download-tools
       - run: make test
