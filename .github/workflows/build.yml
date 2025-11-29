@@ -42,14 +42,16 @@ jobs:
       - name: 运行 golangci-lint
         run: |
           if command -v golangci-lint >/dev/null 2>&1; then
+            # Use locally installed version
             golangci-lint run --timeout=5m
           else
-            # Run golangci-lint in Docker, explicitly using the vendored dependencies
+            # Fallback to Docker image (v1.61.0 is used here)
+            # IMPORTANT FIX: The unsupported --vendor flag has been removed.
             docker run --rm \
               -e GOPROXY=$GOPROXY \
               -e GO111MODULE=on \
               -v "$PWD:/app" -w /app \
-              golangci/golangci-lint:v1.61.0 golangci-lint run --timeout=5m --vendor
+              golangci/golangci-lint:v1.61.0 golangci-lint run --timeout=5m
           fi
       - run: make download-tools
       - run: make test
