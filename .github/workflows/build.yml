@@ -1,4 +1,4 @@
-# 构建 Gotify 服务器 仓库为自建 Gitea 
+# 构建 Gotify 服务器 仓库为自建 Gitea
 name: build
 on: [push, pull_request]
 
@@ -40,15 +40,14 @@ jobs:
           if command -v golangci-lint >/dev/null 2>&1; then
             golangci-lint run --timeout=5m
           else
-            # 优化 Docker 命令：
-            # 1. 使用 -u "$(id -u):$(id -g)" 避免权限问题 (如果适用)
-            # 2. 移除 ./...，让 linter 自动检测 go.mod 文件所在的模块，或显式指定目录
-            # 这里我保持了原有的命令结构，但如果您仍遇到问题，可以尝试移除 ./...
+            # Run golangci-lint in Docker with proper working directory and module setup
+            # Set GO111MODULE=auto to ensure modules are properly detected
             docker run --rm \
               -e GOPROXY=$GOPROXY \
-              -e GO111MODULE=on \
+              -e GO111MODULE=auto \
               -v "$PWD:/work" -w /work \
-              harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m
+              -v $HOME/go/pkg/mod:/go/pkg/mod:ro \
+              harbor.ay.lc/tools/golangci-lint:v1.60.3 golangci-lint run --timeout=5m --modules-download-mode=vendor
           fi
       - run: make download-tools
       - run: make test
