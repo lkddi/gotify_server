@@ -69,3 +69,6 @@
 
  [playstore]: https://play.google.com/store/apps/details?id=com.github.gotify
  [fdroid]: https://f-droid.org/de/packages/com.github.gotify/
+
+
+[![build](https://github.com/lkddi/gotify_server/actions/workflows/build.yml/badge.svg?branch=master&event=push)](https://github.com/lkddi/gotify_server/actions/workflows/build.yml)
